@@ -1,0 +1,142 @@
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Music',
+      theme: ThemeData(),
+      home: const MyHomePage(title: 'Music Player'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => MyHomePageState();
+}
+
+class MyHomePageState extends State<MyHomePage> {
+  var audio = [
+    "Dandelions.mp3",
+    "Heat_Waves.mp3",
+    "Let_Me_Love_You.mp3",
+    "Perfect.mp3",
+    "Night_Changes.mp3",
+    "Blinded_Lights.mp3",
+    "Stay.mp3",
+    "Comethru.mp3",
+    "Believer.mp3",
+    "Let_Me_Down_Slowly.mp3",
+    "In_The_Middle.mp3",
+    "Friends.mp3",
+    "Closer.mp3",
+    "Shape_of_you.mp3",
+    "Steal_My_Girl.mp3",
+    "Cheap_thrills.mp3",
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: ListView.builder(
+        itemCount: audio.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: ListTile(
+              trailing: Icon(Icons.keyboard_arrow_right),
+              title: Text(audio[index]),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => secondscreen(music: audio[index]),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class secondscreen extends StatelessWidget {
+  String? music;
+
+  secondscreen({
+    this.music
+  });
+  AudioPlayer audio_Player = AudioPlayer();
+  var path = "music/";
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+
+      ),
+      body: Center(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Center(
+                child: Container(
+                  width: 277.0,
+                  height: 277.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(28.9),
+                    image:DecorationImage(
+                      image: AssetImage("assets/image/musicplayer.gif"),
+                    ),
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                  onPressed: () async {
+                    await audio_Player.play(AssetSource(path + music.toString()));
+                    print("Play");
+                  },
+                  child: Icon(Icons.play_arrow,color: Colors.brown,)),
+              ElevatedButton(
+                  onPressed: () async {
+                    await audio_Player.pause();
+                    print("Pause");
+                  },
+                  child: Icon(Icons.pause_circle,color: Colors.brown,)),
+
+              ElevatedButton(
+                  onPressed: () async {
+                    await audio_Player.stop();
+                    print("Stop");
+                  },
+                  child: Icon(Icons.stop_circle_sharp,color: Colors.brown,)),
+              ElevatedButton(
+                  onPressed: () async {
+                    print("Forward 5");
+                  },
+                  child: Icon(Icons.forward_5,color: Colors.brown,)),
+              ElevatedButton(
+                  onPressed: () async {
+                    print("backward 5");
+                  },
+                  child: Icon(Icons.rotate_left_outlined,color: Colors.brown,)),
+            ]),
+      ),
+    );
+  }
+}
