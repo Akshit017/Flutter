@@ -1,0 +1,100 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+void main() => runApp(new MyApp());
+
+int AddValue = 0, count = 0;
+
+class MyApp extends StatefulWidget {
+  HomePage createState() => new HomePage();
+}
+
+class _HomePage extends State<MyApp> {
+  late SharedPreferences prefs;
+
+  get prefences => null;
+  initState() {
+    super.initState();
+    init();
+  }
+
+  void init() async {
+    prefs = await SharedPreferences.getInstance();
+    try {
+      int t = prefs.getInt("Add Value")!;
+      setState(() {
+        AddValue = t;
+      });
+    } catch (e) {}
+
+    count = AddValue;
+    setPreviousState();
+  }
+
+  void setPreviousState() {
+    setState(() {
+      AddValue;
+      count;
+    });
+  }
+
+  void increase() {
+    setState(() {
+      AddValue++;
+      count++;
+    });
+    prefs.setInt('Add Value', AddValue);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      title: 'Counter App',
+      home: new Scaffold(
+        appBar: new AppBar(
+          title: new Text("Counter App"),
+          backgroundColor: Color.fromARGB(200, 21, 112, 240),
+        ),
+        body: new Center(
+          child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              makeATextWidget("Add Values ", AddValue),
+              new ButtonBar(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  makeAButton('+', increase),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Widget makeAButton(String label, f()) {
+  return new ElevatedButton(
+    style: ElevatedButton.styleFrom(primary: Color.fromARGB(200, 21, 112, 240),
+    shape: new RoundedRectangleBorder(
+      borderRadius: new BorderRadius.circular(27.0),
+    ),),
+    child: new Text(label,
+        style: new TextStyle(
+          fontSize: 18.0,
+        )),
+    onPressed: f,
+  );
+}
+
+Widget makeATextWidget(String txt, int value) {
+  return new Text(
+    "$txt : $value",
+    style: new TextStyle(
+      fontSize: 25.0,
+      color: Color.fromARGB(200, 21, 112, 240),
+      fontWeight: FontWeight.w600,
+    ),
+  );
+}
